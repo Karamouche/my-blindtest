@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+  <head>
+    <title>My-Blindtest / Geeklin</title>
+    <meta name="description" content="Create your own blindtest with your spotify songs !">
+    <meta name="keywords" content="Geeklin, team, Geeklin Team, Karamouche, pim, developper, spotify, spotify blindtest, my-blindtest">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="title-grid cell">
+        <h1 class="main-title">My-Blindtest Spotify</h1>
+      </div>
+      <div class="image-grid">
+        <img class="image-grid" id="blindtest-img" src="https://cdn-icons-png.flaticon.com/512/232/232413.png" unselectable="on">
+      </div>
+      <div class="form-grid cell">
+        <form action="#" onsubmit="return validateFormLink(this);">
+          <strong><label for="label" class="center sub-text" id="main_label">Your spotify playlist link (public):</label></strong><br />
+          <input type="input" class="center" id="input" placeholder="Link of your playlist ">
+          <button type="submit" class="btn btn-success center">Valider</button>
+        </form>
+      </div>
+      <div class="cell footer-grid">
+        <p class="footer-text">By @Karamouche</p>  
+      </div>
+    </div>
+  </body>
+  <script type="script" src="close-pixelate.js"></script>
+  <script src="script.js"></script>
+</html>
