@@ -11,6 +11,10 @@ h1, h2, h3, p, div.center{
   justify-content: center;
 }
 
+pre{
+  margin: 0px;
+}
+
 .main-title{
 	font-family: "Merriweather";
 	font-size: 46px;
@@ -26,10 +30,6 @@ h1, h2, h3, p, div.center{
   font-style: oblique;
   font-style: "Merriweather";
   font-size: 13px;
-}
-
-form{
-  line-height: 40px;
 }
 
 .btn {
@@ -133,7 +133,6 @@ div.form-grid{
   grid-column: 2;
   grid-row: 4;
   align-items: flex-end;
-  margin-top: 20px;
 }
 
 #input{
