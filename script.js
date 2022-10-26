@@ -118,7 +118,7 @@ function validateFormLink(){
 		else{
 			game.inGame = false;
 			var text = document.getElementById("main_label");
-			text.textContent = "You lost ! It was "+ game.currentTrack.name +" by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score;
+			text.textContent = "You lost ! It was “"+ game.currentTrack.name +"” by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score;
 			var image = document.getElementById("blindtest-img");
 			image.classList.remove('blur');
 		}
