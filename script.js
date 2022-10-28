@@ -52,7 +52,8 @@ class Game{
 		this.inGame = true;
 		this.currentTrack = null;
 		this.audio = null;
-		document.getElementById("input").placeholder = "Your guess."
+		$("#input").attr("placeholder", "Your guess");
+		$("#blindtest-img").addClass("blur");
 	}
 
 	jsonToTrack(jsonFile){
@@ -61,11 +62,8 @@ class Game{
 
 	newTrack(){
 		this.currentTrack = this.trackList[Math.floor(Math.random()*this.trackList.length)];
-		var image = document.getElementById("blindtest-img");
-		image.classList.add('blur');
-		image["src"] = this.currentTrack.cover;
-		var input = document.getElementById("input");
-		input.value = "";
+		$("#blindtest-img").attr("src", this.currentTrack.cover);
+		$("#input").val("");
 		this.audio = new Audio(this.currentTrack.sample);
 		this.audio.play();
 	}
@@ -73,8 +71,7 @@ class Game{
 	checkAnswer(){
 		this.audio.pause();
 		this.audio.currentTime = 0;
-		var input = document.getElementById("input");
-		if (input.value.toUpperCase() == this.currentTrack.name.toUpperCase()){
+		if ($("#input").val().toUpperCase() == this.currentTrack.name.toUpperCase()){
 			return true;
 		}
 		return false;
@@ -82,8 +79,7 @@ class Game{
 
 	wonRound(){
 		this.score++;
-		var text = document.getElementById("main_label");
-		text.textContent = "Game started. Score : "+this.score;
+		$("#main_label").text("Score : "+this.score);
 		this.newTrack();
 	}
 
@@ -105,11 +101,9 @@ function LtoS(L){
 
 function validateFormLink(){
 	if (game == null){
-		var text = document.getElementById("main_label");
-		var input = document.getElementById("input");
 		game = new Game("random link");//input.value
-		input.value = "";
-		text.textContent = "Game started. Score : "+game.score;
+		$("#input").val("	");
+		$("#main_label").text("Game started. Score : "+game.score);
 		game.newTrack();
 	}else if(game.inGame){
 		if(game.checkAnswer()){//boolean returned
@@ -117,17 +111,15 @@ function validateFormLink(){
 		}
 		else{
 			game.inGame = false;
-			var text = document.getElementById("main_label");
-			text.textContent = "You lost ! It was “"+ game.currentTrack.name +"” by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score;
-			var image = document.getElementById("blindtest-img");
-			image.classList.remove('blur');
+			$("#main_label").text("You lost ! It was “"+ game.currentTrack.name +"” by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score);
+			$("#blindtest-img").removeClass("blur");
 		}
 	}else{
 		
 	}
 }
 
-window.ondragstart = function() { return false; } 
+window.ondragstart = function() { return false; } //avoid dragging image
 var game = null;
 const pommesong = new Track("soleil, soleil", "Pomme", "cover link", "sample link");
 console.log(pommesong.toString());

@@ -21,7 +21,7 @@ pre{
 	font-style: oblique;
 }
 
-.sub-text{
+#main_label{
 	font-size: 24px;
 	font-family: "Roboto";
 }
@@ -108,7 +108,7 @@ div.image-grid{
   grid-row: 2;
 }
 
-img.image-grid{
+#blindtest-img{
   width: 350px;
   height: 350px;
   display: block;
