@@ -4,6 +4,11 @@ body{
 
 html {
     height: 100%
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
 }
 
 h1, h2, h3, p, div.center{
@@ -95,6 +100,7 @@ pre{
 
 .cell {
   text-align: center;
+  height: 100px;
 }
 
 .title-grid{
@@ -126,7 +132,6 @@ img.blur {
 div.form-grid{
   grid-column: 2;
   grid-row: 3;
-  margin-top: 20px;
 }
 
 .footer-grid{
