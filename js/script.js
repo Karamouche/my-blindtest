@@ -163,16 +163,20 @@ function accessData(accessToken){
 
 
 //function when click on the button
-$("#main-button").on("click", function(){
+function validateFormLink(){
 	if (game == null){//if there is no game
 		var accessToken = connectSpotify();
 		accessData(accessToken);
+		console.log(accessToken);
 		//CREATE GAME HERE
-		$("input").show();
-		$("button").text("Validate");
-		$("#input").val("");
-		$("#main_label").text("Game started. Score : "+game.score);
-		game.newTrack();
+		if(game != null){
+			$("input").show();
+			$("button").text("Validate");
+			$("#input").val("");
+			$("#main_label").text("Game started. Score : "+game.score);
+			game.newTrack();
+		}
+
 	}else if(game.inGame){
 		if(game.checkAnswer()){
 			game.wonRound();
@@ -185,7 +189,7 @@ $("#main-button").on("click", function(){
 			$("input").hide();
 		}
 	}
-});
+}
 
 $("input").hide();
 window.ondragstart = function() { return false; } //avoid dragging image
