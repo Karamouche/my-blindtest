@@ -15,42 +15,22 @@ class Track{
 class Game{
 	constructor(items){
 		this.score = 0;
-		console.log(items);
-		var JCVD = {
-		    "name": "JCVD",
-		    "artists": [
-		        "Jul"
-		    ],
-		    "cover": "https://i.scdn.co/image/ab67616d0000b2733c505b5ddcbdf80c7dff5a1f",
-		    "sample": "https://p.scdn.co/mp3-preview/6754a91bc040ffbb2f70980fbcadf86385a109e9?cid=22dd5ffe1bdd4c588e1bf2177b66cc14"
-		}
-
-		var ST = {
-		    "name": "6.3",
-		    "artists": [
-		        "Naps",
-		        "Ninho"
-		    ],
-		    "cover": "https://i.scdn.co/image/ab67616d0000b2732cd6b67be46f4bb11bf5dc4d",
-		    "sample": "https://p.scdn.co/mp3-preview/e61d8897bc22cf65b03e67af2eb15b619974247c?cid=22dd5ffe1bdd4c588e1bf2177b66cc14"
-		};
-
-		var PUFF = {
-		    "name": "PUFF PUFF PUFF",
-		    "artists": [
-		        "Gambi"
-		    ],
-		    "cover": "https://i.scdn.co/image/ab67616d0000b273eb7305df518f55400c11718f",
-		    "sample": "https://p.scdn.co/mp3-preview/0ea7bc87a301be30a9ed2a4810a81bdac668e8b4?cid=22dd5ffe1bdd4c588e1bf2177b66cc14"
-		};
-
-		JCVD = this.jsonToTrack(JCVD);
-		ST = this.jsonToTrack(ST);
-		PUFF = this.jsonToTrack(PUFF);
-		this.trackList = [JCVD, ST, PUFF];
+		this.trackList = [];
 		this.inGame = true;
 		this.currentTrack = null;
 		this.audio = null;
+		for (var element of items){
+    		let track_name = element["name"];
+			let artists_name = [];
+			for (var artist of element["artists"]){
+				artists_name.push(artist["name"]);
+			}
+			let cover = element["album"]["images"][0]["url"];
+			let sample = element["preview_url"];
+			var result = new Track(track_name, artists_name, cover, sample);
+			this.trackList.push(result);
+		}
+
 		$("#input").attr("placeholder", "Your guess");
 		$("#blindtest-img").addClass("blur");
 	}
@@ -87,8 +67,8 @@ class Game{
 
 }
 
-function createGame(items){
-	window.game = new Game(items);
+function createGame(data){
+	window.game = new Game(data.items);
 	$("input").show();
 	$("button").text("Validate");
 	$("#input").val("");
@@ -150,7 +130,7 @@ function accessData(accessToken){
 	return $.ajax({
 				url: "https://api.spotify.com/v1/me/top/tracks",
 				type: 'GET',
-				datatype: "json",
+				datatype: "JSON",
 				data: {
 					"limit": 50,
 					"time_range": "long_term"
@@ -171,7 +151,7 @@ function validateFormLink(){
 			window.data = response;
 		});
 		//data transfer time
-		setTimeout(() => { createGame(window.data.items); }, 300);
+		setTimeout(() => { createGame(window.data); }, 500);
 	}else if(game.inGame){
 		if(game.checkAnswer()){
 			game.wonRound();
@@ -180,9 +160,11 @@ function validateFormLink(){
 			game.inGame = false;
 			$("#main_label").text("You lost ! It was “"+ game.currentTrack.name +"” by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score);
 			$("#blindtest-img").removeClass("blur");
-			$("button").hide();
+			$("button").text("Play again");
 			$("input").hide();
 		}
+	}else{
+		location.reload();
 	}
 }
 
