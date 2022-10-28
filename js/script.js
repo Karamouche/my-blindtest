@@ -15,7 +15,6 @@ class Track{
 class Game{
 	constructor(items){
 		this.score = 0;
-		//get track from spotify API
 		console.log(items);
 		var JCVD = {
 		    "name": "JCVD",
@@ -88,9 +87,15 @@ class Game{
 
 }
 
-function startGame(data){
-	game = new Game(data.items);
+function createGame(items){
+	window.game = new Game(items);
+	$("input").show();
+	$("button").text("Validate");
+	$("#input").val("");
+	$("#main_label").text("Game started. Score : "+window.game.score);
+	window.game.newTrack();
 }
+
 
 //convert a list to a format string
 function LtoS(L){
@@ -142,41 +147,31 @@ function connectSpotify(){
 
 
 function accessData(accessToken){
-	$.ajax({
-		url: "https://api.spotify.com/v1/me/top/tracks",
-		type: 'GET',
-		datatype: "json",
-		data: {
-			"limit": 50,
-			"time_range": "long_term"
-		},
-		headers: {
-		'Authorization' : 'Bearer ' + accessToken
-		},
-		success: function(data){
-			console.log(data);
-		}
-
-	});
+	return $.ajax({
+				url: "https://api.spotify.com/v1/me/top/tracks",
+				type: 'GET',
+				datatype: "json",
+				data: {
+					"limit": 50,
+					"time_range": "long_term"
+				},
+				headers: {
+				'Authorization' : 'Bearer ' + accessToken
+				}
+			});
 }
 
 
 
 //function when click on the button
 function validateFormLink(){
-	if (game == null){//if there is no game
+	if (window.game == null){//if there is no game
 		var accessToken = connectSpotify();
-		accessData(accessToken);
-		console.log(accessToken);
-		//CREATE GAME HERE
-		if(game != null){
-			$("input").show();
-			$("button").text("Validate");
-			$("#input").val("");
-			$("#main_label").text("Game started. Score : "+game.score);
-			game.newTrack();
-		}
-
+		$.when( accessData(accessToken) ).done(function(response){
+			window.data = response;
+		});
+		//data transfer time
+		setTimeout(() => { createGame(window.data.items); }, 300);
 	}else if(game.inGame){
 		if(game.checkAnswer()){
 			game.wonRound();
@@ -194,3 +189,4 @@ function validateFormLink(){
 $("input").hide();
 window.ondragstart = function() { return false; } //avoid dragging image
 var game = null;
+var data = null;
