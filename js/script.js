@@ -13,10 +13,10 @@ class Track{
 }
 
 class Game{
-	constructor(link){
+	constructor(items){
 		this.score = 0;
-		this.link = link;
 		//get track from spotify API
+		console.log(items);
 		var JCVD = {
 		    "name": "JCVD",
 		    "artists": [
@@ -61,6 +61,7 @@ class Game{
 	}
 
 	newTrack(){
+		//generate and put a new track to the page
 		this.currentTrack = this.trackList[Math.floor(Math.random()*this.trackList.length)];
 		$("#blindtest-img").attr("src", this.currentTrack.cover);
 		$("#input").val("");
@@ -69,6 +70,7 @@ class Game{
 	}
 
 	checkAnswer(){
+		//Check if the answer is right
 		this.audio.pause();
 		this.audio.currentTime = 0;
 		if ($("#input").val().toUpperCase() == this.currentTrack.name.toUpperCase()){
@@ -78,6 +80,7 @@ class Game{
 	}
 
 	wonRound(){
+		//round won and next round
 		this.score++;
 		$("#main_label").text("Score : "+this.score);
 		this.newTrack();
@@ -85,6 +88,11 @@ class Game{
 
 }
 
+function startGame(data){
+	game = new Game(data.items);
+}
+
+//convert a list to a format string
 function LtoS(L){
 	var result = "";
 	for (element of L){
@@ -99,27 +107,86 @@ function LtoS(L){
 	return result;
 }
 
-function validateFormLink(){
-	if (game == null){
-		game = new Game("random link");//input.value
-		$("#input").val("	");
+function connectSpotify(){
+	const getUrlParameter = (sParam) => {
+		let sPageURL = window.location.search.substring(1),////substring will take everything after the https link and split the #/&
+		sURLVariables = sPageURL != undefined && sPageURL.length > 0 ? sPageURL.split('#') : [],
+		sParameterName,
+		i;
+		let split_str = window.location.href.length > 0 ? window.location.href.split('#') : [];
+		sURLVariables = split_str != undefined && split_str.length > 1 && split_str[1].length > 0 ? split_str[1].split('&') : [];
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] === sParam) {
+			  return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+			}
+		}
+	};
+
+    // Get Access Token
+    const accessToken = getUrlParameter('access_token');
+
+	//Application token & redirect uri
+	const TOKEN = "22dd5ffe1bdd4c588e1bf2177b66cc14";
+	let redirect_uri = 'https%3A%2F%2Fblindtest.geeklin.fr';
+
+	//login screen
+	const redirect = `https://accounts.spotify.com/authorize?client_id=${TOKEN}&response_type=token&&scope=user-library-read%20user-top-read&redirect_uri=${redirect_uri}`;
+
+	if(accessToken == null || accessToken == "" || accessToken == undefined){
+    	window.location.replace(redirect);
+    }
+
+    return accessToken;
+}
+
+
+function accessData(accessToken){
+	$.ajax({
+		url: "https://api.spotify.com/v1/me/top/tracks",
+		type: 'GET',
+		datatype: "json",
+		data: {
+			"limit": 50,
+			"time_range": "long_term"
+		},
+		headers: {
+		'Authorization' : 'Bearer ' + accessToken
+		},
+		success: function(data){
+			console.log(data);
+		}
+
+	});
+}
+
+
+
+//function when click on the button
+$("#main-button").on("click", function(){
+	if (game == null){//if there is no game
+		var accessToken = connectSpotify();
+		accessData(accessToken);
+		//CREATE GAME HERE
+		$("input").show();
+		$("button").text("Validate");
+		$("#input").val("");
 		$("#main_label").text("Game started. Score : "+game.score);
 		game.newTrack();
 	}else if(game.inGame){
-		if(game.checkAnswer()){//boolean returned
+		if(game.checkAnswer()){
 			game.wonRound();
 		}
 		else{
 			game.inGame = false;
 			$("#main_label").text("You lost ! It was “"+ game.currentTrack.name +"” by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score);
 			$("#blindtest-img").removeClass("blur");
+			$("button").hide();
+			$("input").hide();
 		}
-	}else{
-		
 	}
-}
+});
 
+$("input").hide();
 window.ondragstart = function() { return false; } //avoid dragging image
 var game = null;
-const pommesong = new Track("soleil, soleil", "Pomme", "cover link", "sample link");
-console.log(pommesong.toString());
