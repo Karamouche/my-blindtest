@@ -1,14 +1,19 @@
 
 class Track{
 	constructor(name, artists, cover, sample){
-        this.name = name
-        this.artists = artists
-        this.cover = cover
-        this.sample = sample
+		let indexNameQuote = name.indexOf("(");
+		if (indexNameQuote != -1){
+			this.name = String(name.slice(0, indexNameQuote-1));
+		}else{
+			this.name = name;
+		}
+        this.artists = artists;
+        this.cover = cover;
+        this.sample = sample;
 	}
 
 	toString(){
-		return (this.name + " || " + this.artists + " || " + this.cover + " || " + this.sample);
+		return ("“"+ this.name +"” by "+ LtoS(this.artists));
 	}
 }
 
@@ -16,6 +21,7 @@ class Game{
 	constructor(items){
 		this.score = 0;
 		this.trackList = [];
+		this.trackDone = [];
 		this.inGame = true;
 		this.currentTrack = null;
 		this.audio = null;
@@ -42,6 +48,10 @@ class Game{
 	newTrack(){
 		//generate and put a new track to the page
 		this.currentTrack = this.trackList[Math.floor(Math.random()*this.trackList.length)];
+		while(this.trackDone.includes(this.currentTrack)){
+			this.currentTrack = this.trackList[Math.floor(Math.random()*this.trackList.length)];
+		}
+		console.log(this.currentTrack.name);
 		$("#blindtest-img").attr("src", this.currentTrack.cover);
 		$("#input").val("");
 		this.audio = new Audio(this.currentTrack.sample);
@@ -61,10 +71,23 @@ class Game{
 	wonRound(){
 		//round won and next round
 		this.score++;
-		$("#main_label").text("Score : "+this.score);
-		this.newTrack();
+		if(this.score == 50){
+			this.gameWon();
+		}else{
+			this.trackDone.push(this.currentTrack);
+			$("#main_label").text("Score : "+this.score);
+			this.newTrack();
+		}
 	}
 
+	gameWon(){
+		this.inGame = false;
+		$("#main_label").text("You won ! You guessed all of your top 50 listened songs !");
+		$("#blindtest-img").removeClass("blur");
+		$("#blindtest-img").attr("src", "https://cdn-icons-png.flaticon.com/512/232/232413.png");
+		$("button").text("Play again");
+		$("input").hide();
+	}
 }
 
 function createGame(data){
@@ -158,7 +181,7 @@ function validateFormLink(){
 		}
 		else{
 			game.inGame = false;
-			$("#main_label").text("You lost ! It was “"+ game.currentTrack.name +"” by "+ LtoS(game.currentTrack.artists) +"."+'\r\n'+ "Your score : "+game.score);
+			$("#main_label").text("You lost ! It was "+game.currentTrack.toString()+"."+'\r\n'+ "Your score : "+game.score);
 			$("#blindtest-img").removeClass("blur");
 			$("button").text("Play again");
 			$("input").hide();
