@@ -18,8 +18,16 @@
       </div>
       <div class="form-grid cell">
         <form action="#" onsubmit="validateFormLink();return false">
-          <strong><pre for="label" class="center" id="main_label">Your spotify playlist link (public):</pre></strong><br />
+          <strong><pre for="label" class="center" id="main_label">Your spotify playlist link (public):</pre></strong>
           <input type="input" class="center" id="input" placeholder="Link of your playlist ">
+          <div id="time-frame">
+            <label id="text-time" class="center">Top listened up to : </label>
+            <select name="time" id="select-time" class="center">
+             <option value="long_term" selected>several years</option>
+             <option value="medium_term">6 months</option>
+             <option value="short_term">4 weeks</option>
+            </select>
+          </div><br />
           <button type="submit" class="btn btn-success center" id="main-button">Connect to Spotify</button>
         </form>
       </div>

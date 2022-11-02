@@ -51,7 +51,6 @@ class Game{
 		while(this.trackDone.includes(this.currentTrack)){
 			this.currentTrack = this.trackList[Math.floor(Math.random()*this.trackList.length)];
 		}
-		console.log(this.currentTrack.name);
 		$("#blindtest-img").attr("src", this.currentTrack.cover);
 		$("#input").val("");
 		this.audio = new Audio(this.currentTrack.sample);
@@ -182,7 +181,6 @@ function connectSpotify(){
 
     // Get Access Token
     const accessToken = getUrlParameter('access_token');
-
 	//Application token & redirect uri
 	const TOKEN = "22dd5ffe1bdd4c588e1bf2177b66cc14";
 	let redirect_uri = 'https%3A%2F%2Fblindtest.geeklin.fr';
@@ -198,14 +196,14 @@ function connectSpotify(){
 }
 
 
-function accessData(accessToken){
+function accessData(accessToken, range){
 	return $.ajax({
 				url: "https://api.spotify.com/v1/me/top/tracks",
 				type: 'GET',
 				datatype: "JSON",
 				data: {
 					"limit": 50,
-					"time_range": "long_term"
+					"time_range": range
 				},
 				headers: {
 				'Authorization' : 'Bearer ' + accessToken
@@ -219,7 +217,8 @@ function accessData(accessToken){
 function validateFormLink(){
 	if (window.game == null){//if there is no game
 		var accessToken = connectSpotify();
-		$.when( accessData(accessToken) ).done(function(response){
+		$("#time-frame").hide()
+		$.when( accessData(accessToken, $("#select-time").find(":selected").val() )).done(function(response){
 			window.data = response;
 		});
 		//data transfer time

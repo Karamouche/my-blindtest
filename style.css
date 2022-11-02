@@ -31,6 +31,25 @@ pre{
 	font-family: "Roboto";
 }
 
+#text-time{
+  font-size: 16px;
+  font-family: "Roboto";
+}
+
+#time-frame{
+  margin-top: 10px;
+}
+
+#select-time {
+  font-size: .9rem;
+  padding: 2px 5px;
+  width: 130px;
+  height: 35px;
+  background-color: #adffaa;
+  border-radius: 2px;
+  font-style: "Roboto";
+}
+
 .footer-text{
   font-style: oblique;
   font-style: "Merriweather";
