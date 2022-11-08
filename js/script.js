@@ -33,8 +33,11 @@ class Game{
 			}
 			let cover = element["album"]["images"][0]["url"];
 			let sample = element["preview_url"];
-			var result = new Track(track_name, artists_name, cover, sample);
-			this.trackList.push(result);
+			if(sample != null){
+				var result = new Track(track_name, artists_name, cover, sample);
+				this.trackList.push(result);
+			}
+
 		}
 
 		$("#input").attr("placeholder", "Your guess");
@@ -74,7 +77,7 @@ class Game{
 	wonRound(){
 		//round won and next round
 		this.score++;
-		if(this.score == 50){
+		if(this.score == this.trackList.length){
 			this.gameWon();
 		}else{
 			this.trackDone.push(this.currentTrack);
