@@ -224,7 +224,7 @@ function validateFormLink(){
 			window.data = response;
 		});
 		//data transfer time
-		setTimeout(() => { createGame(window.data); }, 500);
+		setTimeout(() => { createGame(window.data); }, 800);
 	}else if(game.inGame){
 		if(game.checkAnswer()){
 			game.wonRound();
