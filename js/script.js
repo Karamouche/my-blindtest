@@ -237,7 +237,11 @@ function validateFormLink(){
 			$("input").hide();
 		}
 	}else{
-		location.reload();
+		window.game = null;
+		$("#blindtest-img").attr("src", "https://cdn-icons-png.flaticon.com/512/232/232413.png");
+		$("#main_label").text("Welcome to my-blindtest !");
+		$("button").text("Start game");
+		$("#time-frame").show();
 	}
 }
 
