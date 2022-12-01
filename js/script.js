@@ -1,4 +1,3 @@
-
 class Track{
 	constructor(name, artists, cover, sample){
 		let indexNameQuote = name.indexOf("(");
@@ -13,7 +12,7 @@ class Track{
 	}
 
 	toString(){
-		return ("“"+ this.name +"” by "+ LtoS(this.artists));
+		return ("“"+ this.name +"” by "+ listToSentence(this.artists));
 	}
 }
 
@@ -42,10 +41,6 @@ class Game{
 
 		$("#input").attr("placeholder", "Your guess");
 		$("#blindtest-img").addClass("blur");
-	}
-
-	jsonToTrack(jsonFile){
-		return new Track(jsonFile.name, jsonFile.artists, jsonFile.cover, jsonFile.sample);
 	}
 
 	newTrack(){
@@ -97,6 +92,7 @@ class Game{
 }
 
 function createGame(data){
+	//Create a new game with the data of the API
 	window.game = new Game(data.items);
 	$("input").show();
 	$("button").text("Validate");
@@ -106,8 +102,8 @@ function createGame(data){
 }
 
 
-//convert a list to a format string
-function LtoS(L){
+//convert a list [A, B, C, D] to a format string "A, B, C and D"
+function listToSentence(L){
 	var result = "";
 	for (element of L){
 		if (element == L[L.length - 1]){
